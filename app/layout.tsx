@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://fitzthomas18.github.io'),
+  metadataBase: new URL('https://sightsdev.github.io'),
 };
 
 export default function Layout({ children }: LayoutProps<"/">) {
