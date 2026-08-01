@@ -1,0 +1,24 @@
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { appName, gitConfig } from './shared';
+import Image from 'next/image';
+import logoImg from '@/public/logo.png';
+
+export function baseOptions(): BaseLayoutProps {
+  return {
+    nav: {
+      title: (
+        <>
+          <Image
+            src={logoImg}
+            alt=""
+            width={24}
+            height={24}
+            className="rounded-sm"
+          />
+          {appName}
+        </>
+      ),
+    },
+    githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+  };
+}
