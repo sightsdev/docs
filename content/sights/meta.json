@@ -1,5 +1,10 @@
 {
   "title": "SIGHTS v2",
   "description": "Documentation for the main SIGHTS interface",
-  "root": true
+  "root": true,
+  "pages": [
+    "---Getting Started---",
+    "index",
+    "installation"
+  ]
 }

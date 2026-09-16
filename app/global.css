@@ -3,17 +3,17 @@
 @import 'fumadocs-ui/css/preset.css';
 
 :root {
-  --color-fd-popover-foreground: var(--color-sky-700);
-  --color-fd-primary: var(--color-sky-600);
+  --color-fd-popover-foreground: var(--color-orange-700);
+  --color-fd-primary: var(--color-orange-600);
   --color-fd-primary-foreground: var(--color-white);
-  --color-fd-accent: color-mix(in srgb, var(--color-sky-600) 15%, transparent);
+  --color-fd-accent: color-mix(in srgb, var(--color-orange-600) 15%, transparent);
 }
 
 .dark {
-  --color-fd-popover-foreground: var(--color-sky-400);
-  --color-fd-primary: var(--color-sky-400);
-  --color-fd-primary-foreground: var(--color-sky-950);
-  --color-fd-accent: color-mix(in srgb, var(--color-sky-400) 20%, transparent);
+  --color-fd-popover-foreground: var(--color-orange-400);
+  --color-fd-primary: var(--color-orange-400);
+  --color-fd-primary-foreground: var(--color-orange-950);
+  --color-fd-accent: color-mix(in srgb, var(--color-orange-400) 20%, transparent);
 }
 
 html {

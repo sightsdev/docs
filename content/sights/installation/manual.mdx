@@ -1,0 +1,213 @@
+---
+title: Manual
+description: Manual Install Guide
+---
+
+## Requirements
+- Python 3.13 or newer
+- NodeJS 22 LTS or newer
+- [uv](https://docs.astral.sh/uv/) (Recommended: 0.12.x or newer, Minimum: 0.5.0)
+- [supervisord](https://supervisord.org) (Recommended: 4.2.5 or newer, Minimum: 4.0)
+- [corepack](https://github.com/nodejs/corepack) (Must be installed manually if running NodeJS 25 or newer)
+- [ttyd](https://tsl0922.github.io/ttyd/) (Recommended: 1.7.7)
+- [openssh](https://www.openssh.org/)
+
+## Debian / Ubuntu / PiOS
+
+##### 1. Install Dependencies with apt
+```bash
+sudo apt install curl git gnupg libgl-dev openssh-client openssh-server pipx python3 supervisor
+```
+
+##### 2. Download NodeJS repo script
+```bash
+curl -fsSLO https://deb.nodesource.com/setup_22.x
+```
+
+##### 3. Execute with sudo
+<Callout type="warn" title="Warning">
+    Always check the contents of a file before executing it, especially before executing with sudo<br/>
+    <b>You</b> are responsible for any code you execute on your computer.<br/>
+</Callout>
+```bash
+chmod +x setup_22.x ; sudo ./setup_22.x
+```
+
+##### 4. Install NodeJS with apt
+```bash
+sudo apt install nodejs
+```
+
+##### 5. Install UV
+```bash
+sudo pipx install --global uv
+```
+
+##### 6.1. Install ttyd from apt
+<Callout type="warn" title="Warning for Debian users">
+    ttyd is only in the debian repos on sid. If you are on 13 Trixie, use the manual install instructions below
+</Callout>
+
+```bash
+sudo apt install ttyd
+```
+
+
+##### 6.2. Build & install ttyd manually
+
+```bash
+sudo apt install build-essential cmake libjson-c-dev libwebsockets-dev
+```
+
+```bash
+git clone https://github.com/tsl0922/ttyd.git
+```
+
+
+##### 6. Clone SIGHTS
+```bash
+sudo git clone https://github.com/sightsdev/sights-v2 /opt/sights-v2 ; cd /opt/sights-v2
+```
+
+##### 7. Enable corepack
+```bash
+sudo corepack enable
+```
+
+##### 8. Install Node dependencies
+```bash
+sudo yarn install
+```
+
+##### 9. Build frontend
+```bash
+sudo yarn sights:build
+```
+<Callout>
+    Ignore the warning about failing to find the svelte-kit config file. It is normal on the first build
+</Callout>
+
+##### 10. Install Python dependencies
+```bash
+cd server ; sudo uv sync
+```
+
+##### 11. Copy supervisord config file
+```bash
+sudo cp /opt/sights-v2/install/supervisord.conf /etc/supervisor/conf.d/sights-v2.conf
+```
+
+##### 12. Restart the service
+```bash
+sudo systemctl restart supervisor
+```
+
+##### 13. Copy the ttyd service
+```bash
+sudo cp /opt/sights-v2/install/ttyd.service /etc/systemd/system/ttyd.service
+```
+
+##### 14. Enable the sshd and ttyd service
+```bash
+sudo systemctl daemon-reload ; sudo systemctl enable --now sshd ttyd
+```
+
+You now should be able to go to `http://localhost:8000` or `http://(your robots ip):8000` on another device and see the SIGHTS Interface
+
+If you don't know your robot's IP, you can find it by running `ip addr` and looking at the `inet` value in the active network interface
+
+e.g. `inet 10.0.0.95/24`, the ip is `10.0.0.95`
+
+It is recommended that you set a static IP for your robot.
+
+
+## Arch
+
+##### 1. Install Dependencies with pacman
+```bash
+sudo pacman -S corepack git nodejs python3 sshd supervisor ttyd uv 
+```
+
+##### 2. Clone SIGHTS
+```bash
+sudo git clone https://github.com/sightsdev/sights-v2 /opt/sights-v2 ; cd /opt/sights-v2
+```
+
+##### 3. Enable corepack
+```bash
+sudo corepack enable
+```
+
+##### 4. Install Node dependencies
+```bash
+sudo yarn install
+```
+
+##### 5. Build frontend
+```bash
+sudo yarn sights:build
+```
+
+##### 6. Install Python dependencies
+```bash
+cd server ; sudo uv sync
+```
+
+##### 7. Copy supervisord config file
+```bash
+sudo cp /opt/sights-v2/install/supervisord.conf /etc/supervisor/sights-v2.ini
+```
+
+##### 8. Enable and start the service
+```bash
+sudo systemctl enable --now supervisord
+```
+
+##### 9. Copy the ttyd service
+```bash
+sudo cp /opt/sights-v2/install/ttyd.service /etc/systemd/system/ttyd.service
+```
+
+##### 10. Enable the sshd and ttyd service
+```bash
+sudo systemctl daemon-reload ; sudo systemctl enable --now sshd ttyd
+```
+
+You now should be able to go to `http://localhost:8000` or `http://(your robots ip):8000` on another device and see the SIGHTS Interface
+
+If you don't know your robot's IP, you can find it by running `ip addr` and looking at the `inet` value in the active network interface
+
+e.g. `inet 10.0.0.95/24`, the ip is `10.0.0.95`
+
+It is recommended that you set a static IP for your robot.
+
+
+## Troubleshooting
+
+If you have reached the end of the installation and cannot see the SIGHTS Interface at the ip address, restart your robot.
+
+If that still doesn't fix it, make sure that the supervisor daemon is running and has started SIGHTS
+
+```bash
+sudo systemctl status supervisor # (or supervisord, depends on the distro)
+```
+
+If there are no mentions of any uvicorn processes, try copying the config file from SIGHTS again. If thats still a problem, check the [supervisord documentation](https://supervisord.org/) for more info. There may be a different path that the config needs to be placed.
+
+You can always run SIGHTS manually in a terminal by doing
+
+```bash
+cd /opt/sights-v2/server ; uv run uvicorn server:app --port 8000
+```
+
+When running manually, if you are getting an error like `RuntimeError: Directory '../client/build' does not exist`, it means that you did not build the SIGHTS frontend properly, or it failed. 
+
+You can build it with:
+
+```bash
+sudo yarn sights:build
+```
+
+and try running uvicorn again.
+
+<br/>

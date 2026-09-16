@@ -10,3 +10,19 @@ description: Welcome to the SIGHTS Project!
 # What is SIGHTS?
 
 SIGHTS (SART Integrated GUI and Host Teleoperation Service) is a web based interface developed for SART's robot for competing in RoboCup.
+
+It is designed to allow complete control and monitoring of a robot connected over the network.
+
+SIGHTS has hardware support for:
+- Cameras
+- Drive
+- Arm
+- Sensors
+
+it also has a ssh terminal built-in to the interface
+
+SIGHTS features a full plugin system which provides an abstraction layer for all of the type of plugins. Every type of plugin is expected to conform to a certain structure of functions, and return information in certain ways. This allows full extensibility, whilst keeping a fairly simple structure for the main server.
+
+Out of the box, SIGHTS contains no plugins apart from a Random Sensor plugin for testing.
+
+You can check out our [plugin repository](https://github.com/sightsdev/plugins) to grab the ones you need, or use the Developing section of this documentation to develop your own! Once you are done, feel free to open a Pull Request and contribute your plugin to our repo.
